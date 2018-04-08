@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Ciphers {
     public static void main(String[] args) {
-        String message0 = "Enter e to encode a message or d to decode a message";
+        String message0 = "Enter e to encode a message or d to decode a message or # to exit";
         String message1 = "Enter s to use Substitution Cipher or # to exit";
         System.out.println(message0);
         Scanner input = new Scanner(System.in);
@@ -35,7 +35,7 @@ public class Ciphers {
 
     private static void substitutionCipherEncode(){
         String encode = "encode";
-        String[] tokenArray = getMessage(encode);
+        String[] tokenArray = encodeMessage(encode);
 
         ArrayList<Integer> encodedArray = new ArrayList<Integer>();
         
@@ -46,6 +46,7 @@ public class Ciphers {
         for(int i = 0; i < intArray.length; i++) {
             int encodeInt = substitutionEncode(intArray[i], shiftSize);
             encodedArray.add(encodeInt);
+            System.out.print(encodeInt+ " ");
         }
         System.out.println();
         System.out.println("Encoded message:");
@@ -58,15 +59,15 @@ public class Ciphers {
     
     private static void substitutionCipherDecode(){
         String decode = "decode";
-        String[] tokenArray = getMessage(decode);
+        int[] tokenArray = decodeMessage(decode);
         ArrayList<Integer> decodedArray = new ArrayList<Integer>();
 
-        int[] intArray = getInts(tokenArray);
+        //int[] intArray = getInts(tokenArray);
         int shiftSize = subCipherKey();
 
         System.out.println("Decoded message:");
-        for(int i = 0; i < intArray.length; i++){
-            int decodedMessage = substitutionDecode(intArray[i], shiftSize);
+        for(int i = 0; i < tokenArray.length; i++){
+            int decodedMessage = substitutionDecode(tokenArray[i], shiftSize);
             decodedArray.add(decodedMessage);
         }
         System.out.println();
@@ -104,7 +105,7 @@ public class Ciphers {
         return letter - shift;
     }
     
-    private static String[] getMessage(String message) {
+    private static String[] encodeMessage(String message) {
         System.out.println("Enter the message you want to "+message);
         Scanner input = new Scanner(System.in);
 
@@ -126,6 +127,26 @@ public class Ciphers {
         }
 
         return tokenArray;
+    }
+    
+    private static int[] decodeMessage(String message) {
+        System.out.println("Enter the numbers of your encoded message");
+        Scanner input = new Scanner(System.in).useDelimiter(" *");
+        ArrayList<String> tokenTempArray = new ArrayList<String>();
+
+        String nextToken = input.nextLine();
+
+        StringTokenizer tokens = new StringTokenizer(nextToken, " ");
+        
+        while(tokens.hasMoreTokens()) {
+            String string1 = tokens.nextToken();
+            tokenTempArray.add(string1);
+        }
+        int[] intArray = new int[tokenTempArray.size()];
+        for(int i = 0; i < intArray.length; i++) {
+            intArray[i] = Integer.valueOf(tokenTempArray.get(i));
+        }
+        return intArray;
     }
 
     private static int[] getInts(String[] messageArray) {
